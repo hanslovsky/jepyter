@@ -1,0 +1,23 @@
+{
+  "description": "Java Embedded Python.",
+  "properties": {
+    "v": "3.9.1"
+  },
+  "link": "https://github.com/ninia/jep",
+  "repositories": [],
+  "dependencies": [
+    "black.ninia:jep:$v"
+  ],
+  "imports": [
+    "jep.SharedInterpreter",
+    "java.lang.Class",
+    "java.lang.Thread",
+    "java.util.concurrent.Callable",
+    "java.util.concurrent.Executors",
+    "java.util.concurrent.LinkedBlockingQueue"
+  ],
+  "init": [
+    "class P {private lateinit var python: SharedInterpreter; private val executor = Executors.newSingleThreadExecutor().also { it.submit { python = SharedInterpreter() } }; fun exec(code: String) = executor.submit { python.exec(code) }.get().let { Unit }; operator fun get(name: String) = executor.submit(Callable { python.getValue(name) }).get(); operator fun set(name: String, value: Any) = executor.submit { python.set(name, value) }.get() }",
+    "val python = P()"
+  ]
+}
