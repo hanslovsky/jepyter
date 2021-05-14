@@ -7,15 +7,7 @@
   "link": "https://github.com/ninia/jep",
   "repositories": [],
   "dependencies": [
-    "black.ninia:jep:$v"
-  ],
-  "imports": [
-    "jep.DirectNDArray",
-    "jep.SharedInterpreter"
-  ],
-  "init": [
-    "class Python { private lateinit var _python: SharedInterpreter; private val executor = java.util.concurrent.Executors.newSingleThreadExecutor { java.lang.Thread(it, \"CPython\").also { it.setDaemon(true) } }; fun exec(code: String) = executor.submit { python.exec(code) }.get().let { Unit }; operator fun get(name: String) = executor.submit(java.util.concurrent.Callable<Any> { python.getValue(name) }).get(); operator fun set(name: String, value: Any?) = executor.submit { python.set(name, value) }.get(); private val python: SharedInterpreter get() { if (!this::_python.isInitialized) _python  = SharedInterpreter(); return _python }; operator fun invoke(code: String) = exec(code) }",
-    "val python = Python()",
-    "fun <T> T.alsoInPython(name: String) = also { python[name] = this }"
+    "black.ninia:jep:$v",
+    "me.hanslovsky:jepyter:0.1.0-SNAPSHOT"
   ]
 }
