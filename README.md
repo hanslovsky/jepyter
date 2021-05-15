@@ -32,6 +32,6 @@ the latest development version on the Jepyter `main` branch.
 ## Examples
 
 Usage examples are provided in
- - [`jupyter.ipynb`](jupyter.ipynb): General usage example
+ - [`jepyter.ipynb`](jepyter.ipynb): General usage example
  - [`jepyter-numpy.ipynb`](jepyter-numpy.ipynb): Usage example with [NumPy](https://numpy.org/). Requires NumPy installation into the interpreter that is used for Jep.
  - [`jepyter-ntakt.ipynb`](jepyter-ntakt.ipynb): Usage example for shared memory between [nta.kt](https://github.com/saalfeldlab/ntakt) and NumPy. Requires NumPy installation into the interpreter that is used for Jep.
