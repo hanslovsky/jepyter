@@ -2,11 +2,13 @@
 {
   "description": "Java Embedded Python.",
   "properties": {
-    "jepyter.version": "0.1.0-SNAPSHOT",
+    "jepyter.version": "main-SNAPSHOT",
     "jep.version": "3.9.1"
   },
   "link": "https://github.com/ninia/jep",
-  "repositories": [],
+  "repositories": [
+    "https://jitpack.io"
+  ],
   "dependencies": [
     "black.ninia:jep:$jep.version",
     "me.hanslovsky:jepyter:$jepyter.version"
