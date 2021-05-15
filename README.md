@@ -15,7 +15,7 @@
  3. Install the [Kotlin Jupyter kernel](https://github.com/Kotlin/kotlin-jupyter). Note that Jepyter requires the latest master and installation [from sources](https://github.com/Kotlin/kotlin-jupyter#from-sources).
 
 
- ## Usage
+## Usage
 
 Inside a Jupyter cell with Kotlin kernel, use [line magics](https://github.com/Kotlin/kotlin-jupyter#line-magics) to import the Jep library definitions. You can include the library definition as a path to a local file, e.g.
 
@@ -27,3 +27,11 @@ if the Jupyter started the parent directory of  `jep.json`, or by specifying a r
 %use jep@url[https://raw.githubusercontent.com/hanslovsky/jepyter/main/jep.json]
 ```
 the latest development version on the Jepyter `main` branch.
+
+
+## Examples
+
+Usage examples are provided in
+ - [`jupyter.ipynb`](jupyter.ipynb): General usage example
+ - [`jepyter-numpy.ipynb`](jepyter-numpy.ipynb): Usage example with [NumPy](https://numpy.org/). Requires NumPy installation into the interpreter that is used for Jep.
+ - [`jepyter-ntakt.ipynb`](jepyter-ntakt.ipynb): Usage example for shared memory between [nta.kt](https://github.com/saalfeldlab/ntakt) and NumPy. Requires NumPy installation into the interpreter that is used for Jep.
