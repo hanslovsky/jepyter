@@ -40,18 +40,6 @@ publishing {
                     system.set("Travis CI")
                     url.set("https://travis-ci.com/hanslovsky/jepyter")
                 }
-//                repositories {
-//                    add(maven("https://maven.scijava.org/content/groups/public"))
-//                }
-//                withXml {
-//                    asNode()
-//                        .appendNode("repositories")
-//                        .appendNode("repository").also {
-//                            it.appendNode("id", "scijava.public")
-//                            it.appendNode("url", "https://maven.scijava.org/content/groups/public")
-//                        }
-////                            .appendNode("scijava.public", "https://maven.scijava.org/content/groups/public")
-//                }
             }
         }
     }
