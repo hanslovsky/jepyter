@@ -16,6 +16,10 @@ jobs:
         with:
           java-version: "8"
           distribution: "adopt"
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
       - name: Build Jepyter and execute unit tests
         run: ./gradlew clean build test
       - run: echo "🍏 This job's status is ${{ job.status }}."
