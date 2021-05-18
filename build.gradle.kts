@@ -15,6 +15,14 @@ plugins {
 
 dependencies {
     implementation("black.ninia:jep:3.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 publishing {

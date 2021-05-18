@@ -4,10 +4,11 @@ import jep.SharedInterpreter
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.declare
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
+import java.io.Closeable
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
-class Python {
+class Python : Closeable {
     private lateinit var _python: SharedInterpreter
     private val executor = Executors.newSingleThreadExecutor { Thread(it, "CPython").also { it.isDaemon = true } }
     fun exec(code: String) = exec { python.exec(code) }
@@ -20,6 +21,10 @@ class Python {
         return _python
     }
     fun <T> exec(task: Callable<T>) = executor.submit(task).get()
+    override fun close() {
+        exec { python.close() }
+        executor.shutdown()
+    }
 }
 
 @JupyterLibrary
@@ -27,7 +32,7 @@ class Jepyter : JupyterIntegration() {
     override fun Builder.onLoaded() {
         import("jep.DirectNDArray")
 
-        val python: Python = Python()
+        val python = Python()
 
         preprocessCode { code ->
             if (code.startsWith("%%python")) { python(code.removePrefix("%%python")); "" }
