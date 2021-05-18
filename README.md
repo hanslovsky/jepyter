@@ -1,4 +1,5 @@
 [![](https://jitpack.io/v/me.hanslovsky/jepyter.svg)](https://jitpack.io/#me.hanslovsky/jepyter)
+[![](http://github.com/hanslovsky/jepyter/actions/workflows/build.yaml/badge.svg)](http://github.com/hanslovsky/jepyter/actions/workflows/build.yaml)
 
 # Jepyter
 
