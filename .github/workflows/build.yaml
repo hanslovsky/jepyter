@@ -28,4 +28,9 @@ jobs:
         run: |
           PYTHONHOME=$(dirname $(dirname $(which python)))
           PYTHONHOME=$PYTHONHOME ./gradlew clean build test
+          VERSION=$(./gradlew properties | grep version | sed 's/version: //')
+          echo version=$VERSION
+          if [ "${{ github.ref }}" = refs/head/main ] & [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?$ ]]; then
+              echo Making release for version $VERSION
+          fi
       - run: echo "🍏 This job's status is ${{ job.status }}."
