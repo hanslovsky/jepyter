@@ -1,13 +1,8 @@
-name: Build
+name: Release
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  release:
-    types: [created]
+    tags:
+      - jepyter-*
 jobs:
   Build-Ubuntu:
     runs-on: ubuntu-latest
@@ -36,3 +31,28 @@ jobs:
         run: |
           PYTHONHOME=$(dirname $(dirname $(which python)))
           PYTHONHOME=$PYTHONHOME ./gradlew clean build test
+      - name: Get artifact name
+        run: |
+          ARTIFACT_PATH=$(ls build/libs/*.jar | head -n 1)
+          ARTIFACT_NAME=$(basename $ARTIFACT_PATH)
+          echo ARTIFACT_NAME=${ARTIFACT_NAME} >> $GITHUB_ENV
+          echo ARTIFACT_PATH=${ARTIFACT_PATH} >> $GITHUB_ENV
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Jepyter ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.ARTIFACT_PATH }}
+          asset_name: ${{ env.ARTIFACT_NAME }}
+          asset_content_type: application/java-archive
+      - run: echo "🍏 This job's status is ${{ job.status }}."
