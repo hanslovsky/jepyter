@@ -37,19 +37,19 @@ jobs:
           PYTHONHOME=$(dirname $(dirname $(which python)))
           PYTHONHOME=$PYTHONHOME ./gradlew clean build test
       - name: Get artifact name
-        if: startsWith(github.ref, 'refs/tags/jepyter-')
+#        if: startsWith(github.ref, 'refs/tags/jepyter-')
         run: |
-          ARTIFACT_PATHNAME=$(ls build/libs/*.jar | head -n 1)
-          ARTIFACT_NAME=$(basename $ARTIFACT_PATHNAME)
-          echo ::set-env name=ARTIFACT_NAME::${ARTIFACT_NAME}
-          echo ::set-env name=ARTIFACT_PATHNAME::${ARTIFACT_PATHNAME}
+          ARTIFACT_PATH=$(ls build/libs/*.jar | head -n 1)
+          ARTIFACT_NAME=$(basename $ARTIFACT_PATH)
+          echo ARTIFACT_NAME=${ARTIFACT_NAME} >> $GITHUB_ENV
+          echo ARTIFACT_PATH=${ARTIFACT_PATH} >> $GITHUB_ENV
       - if: startsWith(github.ref, 'refs/tags/jepyter-')
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.ARTIFACT_PATHNAME }}
+          asset_path: ${{ env.ARTIFACT_PATH }}
           asset_name: ${{ env.ARTIFACT_NAME }}
           asset_content_type: application/java-archive
       - run: echo "🍏 This job's status is ${{ job.status }}."
