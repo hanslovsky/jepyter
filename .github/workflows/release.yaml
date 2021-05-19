@@ -4,7 +4,7 @@ on:
     tags:
       - jepyter-*
 jobs:
-  Build-Ubuntu:
+  Publish:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -27,16 +27,31 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install jep
+      - name: Verify Jepyter version
+        run: |
+          JEPYTER_VERSION=$(./gradlew properties | grep 'version:' | sed 's/version: //')
+          echo JEPYTER_VERSION=$JEPYTER_VERSION >> $GITHUB_ENV
+          echo JEPYTER_VERSION=$JEPYTER_VERSION
+          [ "{{ github.ref }}" = "jepyter-$JEPYTER_VERSION" ]
       - name: Build Jepyter and execute unit tests
         run: |
           PYTHONHOME=$(dirname $(dirname $(which python)))
-          PYTHONHOME=$PYTHONHOME ./gradlew clean build test
+          PYTHONHOME=$PYTHONHOME ./gradlew clean build test publishToMavenLocal
       - name: Get artifact name
         run: |
-          ARTIFACT_PATH=$(ls build/libs/*.jar | head -n 1)
-          ARTIFACT_NAME=$(basename $ARTIFACT_PATH)
+          BASENAME="jepyter-${{ env.JEPYTER_VERSION }}"
+          ARTIFACT_NAME="$BASENAME.jar"
+          ARTIFACT_PATH="build/libs/$ARTIFACT_NAME"
+          POM_NAME="$BASENAME.pom"
+          POM_PATH=build/publications/maven/pom-default.xml
+          MODULE_NAME="$BASENAME.module"
+          MODULE_PATH=build/publications/maven/module.json
           echo ARTIFACT_NAME=${ARTIFACT_NAME} >> $GITHUB_ENV
           echo ARTIFACT_PATH=${ARTIFACT_PATH} >> $GITHUB_ENV
+          echo POM_NAME=$POM_NAME >> $GITHUB_ENV
+          echo POM_PATH=$POM_PATH >> $GITHUB_ENV
+          echo MODULE_NAME=$MODULE_NAME >> $GITHUB_ENV
+          echo MODULE_PATH=$MODULE_PATH >> $GITHUB_ENV
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -47,12 +62,31 @@ jobs:
           release_name: Jepyter ${{ github.ref }}
           draft: false
           prerelease: false
-      - uses: actions/upload-release-asset@v1
+      - name: Upload jar
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.ARTIFACT_PATH }}
           asset_name: ${{ env.ARTIFACT_NAME }}
+          asset_content_type: application/java-archive
+      - name: Upload module json
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.MODULE_PATH }}
+          asset_name: ${{ env.MODULE_NAME }}
+          asset_content_type: application/java-archive
+      - name: Upload pom
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.POM_PATH }}
+          asset_name: ${{ env.POM_NAME }}
           asset_content_type: application/java-archive
       - run: echo "🍏 This job's status is ${{ job.status }}."
