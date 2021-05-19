@@ -33,7 +33,7 @@ jobs:
           echo JEPYTER_VERSION=$JEPYTER_VERSION >> $GITHUB_ENV
           echo JEPYTER_VERSION=$JEPYTER_VERSION
           echo GITHUB_REF=${{ github.ref }}
-          [ "${{ github.ref }}" = "refs/tags/jepyter-$JEPYTER_VERSION" ]
+#          [ "${{ github.ref }}" = "refs/tags/jepyter-$JEPYTER_VERSION" ]
       - name: Build Jepyter and execute unit tests
         run: |
           PYTHONHOME=$(dirname $(dirname $(which python)))
