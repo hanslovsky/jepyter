@@ -38,7 +38,7 @@ jobs:
         run: |
           JEPYTER_VERSION=$(./gradlew properties | grep 'version:' | sed 's/version: //')
           echo JEPYTER_VERSION=$JEPYTER_VERSION
-          if [[ "JEPYTER_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9](-SNAPSHOT)?$ ]]; then
+          if [[ "$JEPYTER_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9](-SNAPSHOT)?$ ]]; then
               echo JEPYTER_VERSION=$JEPYTER_VERSION >> $GITHUB_ENV
           else
               echo JEPYTER_VERSION='' >> $GITHUB_ENV
