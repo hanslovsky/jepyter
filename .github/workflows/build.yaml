@@ -34,3 +34,24 @@ jobs:
         run: |
           PYTHONHOME=$(dirname $(dirname $(which python)))
           PYTHONHOME=$PYTHONHOME ./gradlew clean build test
+      - name: Extract version and add to environment if release
+        run: |
+          JEPYTER_VERSION=$(./gradlew properties | grep 'version:' | sed 's/version: //')
+          echo JEPYTER_VERSION=$JEPYTER_VERSION
+          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9](-SNAPSHOT)?$ ]]; then
+              echo JEPYTER_VERSION=$JEPYTER_VERSION >> $GITHUB_ENV
+          else
+              echo JEPYTER_VERSION='' >> $GITHUB_ENV
+          fi
+      - name: Make release tag if on main and non-SNAPSHOT version
+        uses: actions/github-script@v3
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.JEPYTER_VERSION != '' }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/jepyter-{{ env.JEPYTER_VERSION}}",
+              sha: context.sha
+            })
