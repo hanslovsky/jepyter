@@ -1,5 +1,13 @@
 name: Build
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types: [published, created, edited]
 jobs:
   Build-Ubuntu:
     runs-on: ubuntu-latest
@@ -28,9 +36,26 @@ jobs:
         run: |
           PYTHONHOME=$(dirname $(dirname $(which python)))
           PYTHONHOME=$PYTHONHOME ./gradlew clean build test
-          VERSION=$(./gradlew properties | grep version | sed 's/version: //')
-          echo version=$VERSION
-          if [ "${{ github.ref }}" = refs/head/main ] & [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?$ ]]; then
-              echo Making release for version $VERSION
-          fi
+      - if: startsWith(github.ref, "refs/tags/jepyter-")
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/libs/*.jar
+          asset_name: jepyter
+          tag: ${{ github.ref }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+#      - name: Determine if tag is reuqired
+#        run: |
+#          VERSION=$(./gradlew properties | grep version | sed 's/version: //')
+#          echo version=$VERSION
+#          if [ "${{ github.ref }}" = refs/head/main ] & [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?$ ]]; then
+#              echo $VERSION > version.tmp
+#              echo Making release for version $VERSION
+#              true
+#          else
+#              false
+#      - name: Make tag
+#        uses: mathieudutour/github-tag-action@v5.5
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          custom_tag:
