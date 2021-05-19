@@ -52,6 +52,6 @@ jobs:
             github.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/jepyter-{{ env.JEPYTER_VERSION}}",
+              ref: "refs/tags/jepyter-${{ env.JEPYTER_VERSION }}",
               sha: context.sha
             })
