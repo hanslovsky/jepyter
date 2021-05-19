@@ -45,7 +45,7 @@ jobs:
           echo PROJECT_NAME=$PROJECT_NAME >> $GITHUB_ENV
           echo PROJECT_NAME=$PROJECT_NAME
 
-          if [[ "$PROJECT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9](-SNAPSHOT)?$ ]]; then
+          if [[ "$PROJECT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
               IS_RELEASE_VERSION='1'
           else
               IS_RELEASE_VERSION='0'
@@ -110,3 +110,39 @@ jobs:
           asset_name: ${{ env.POM_NAME }}
           asset_content_type: application/java-archive
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  Bump-Development-Cycle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Define new project version if main branch and release
+        run: |
+          PROJECT_VERSION=$(./gradlew properties | grep 'version:' | sed 's/version: //')
+          echo PROJECT_VERSION=$PROJECT_VERSION >> $GITHUB_ENV
+          echo PROJECT_VERSION=$PROJECT_VERSION
+
+          if [[ "$PROJECT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              IS_RELEASE_VERSION='1'
+              PATCH=$(echo $PROJECT_VERSION | tr '.' '\n' | tail -n1)
+              MINOR=$(echo $PROJECT_VERSION | tr '.' '\n' | tail -n2 | head -n1)
+              MAJOR=$(echo $PROJECT_VERSION | tr '.' '\n' | head -n1)
+              NEW_PATCH=$((PATCH + 1))
+              NEW_PROJECT_VERSION="$MAJOR.$MINOR.$NEW_PATCH-SNAPSHOT"
+              echo NEW_PROJECT_VERSION=$NEW_PROJECT_VERSION >> $GITHUB_ENV
+              echo NEW_PROJECT_VERSION=$NEW_PROJECT_VERSION
+          else
+              IS_RELEASE_VERSION='0'
+              BUMPED_VERSION=''
+          fi
+      - name: Update gradle.properties with bumped version
+        if: ${{ github.ref == 'refs/heads/main' && env.IS_RELEASE_VERSION == '1' }}
+        run: |
+          sed "s/^version=${{ env.PROJECT_VERSION }}$/version=${{ env.NEW_PROJECT_VERSION }}/" gradle.properties -i
+          PROJECT_VERSION=$(./gradlew properties | grep 'version:' | sed 's/version: //')
+          [ "$PROJECT_VERSION" = "${{ env.NEW_PROJECT_VERSION }}" ]
+      - name: Commit changes and push gradle.properties with bumped version
+        if: ${{ github.ref == 'refs/heads/main' && env.IS_RELEASE_VERSION == '1' }}
+        # push to github from actions: https://stackoverflow.com/a/58393457/1725687
+        run: |
+          git add gradle.properties
+          git commit -m "Bump to next development cycle (${{ env.NEW_PROJECT_VERSION }})"
+          git push
