@@ -20,11 +20,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - run: which python
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install jep
       - name: Build Jepyter and execute unit tests
-        run: ./gradlew clean build test
+        run: |
+          PYTHONHOME=$(dirname $(dirname $(which python)))
+          PYTHONHOME=$PYTHONHOME ./gradlew clean build test
       - run: echo "🍏 This job's status is ${{ job.status }}."
