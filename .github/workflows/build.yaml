@@ -45,7 +45,7 @@ jobs:
           fi
       - name: Make release tag if on main and non-SNAPSHOT version
         uses: actions/github-script@v3
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.JEPYTER_VERSION != '' }}
+        if: ${{ env.JEPYTER_VERSION != '' }}
         with:
           github-token: ${{ github.token }}
           script: |
