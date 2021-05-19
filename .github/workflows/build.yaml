@@ -34,8 +34,7 @@ jobs:
           echo PYTHONHOME=$PYTHONHOME >> $GITHUB_ENV
           echo PYTHONHOME=$PYTHONHOME
       - name: Build and execute unit tests
-        run: |
-          ./gradlew clean build test publishToMavenLocal
+        run: ./gradlew clean build test publishToMavenLocal
       - name: Define project environment variables
         run: |
           PROJECT_VERSION=$(./gradlew properties | grep 'version:' | sed 's/version: //')
