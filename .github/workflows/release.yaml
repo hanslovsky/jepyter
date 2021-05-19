@@ -32,7 +32,7 @@ jobs:
           JEPYTER_VERSION=$(./gradlew properties | grep 'version:' | sed 's/version: //')
           echo JEPYTER_VERSION=$JEPYTER_VERSION >> $GITHUB_ENV
           echo JEPYTER_VERSION=$JEPYTER_VERSION
-          [ "{{ github.ref }}" = "jepyter-$JEPYTER_VERSION" ]
+          [ "${{ github.ref }}" = "jepyter-$JEPYTER_VERSION" ]
       - name: Build Jepyter and execute unit tests
         run: |
           PYTHONHOME=$(dirname $(dirname $(which python)))
