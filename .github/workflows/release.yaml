@@ -9,7 +9,7 @@ jobs:
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "Issue labels: $ISSUE_LABELS"
+      - run: echo "Issue labels... $ISSUE_LABELS"
         env:
           ISSUE_LABELS: ${{ toJSON(github.event.issue.labels) }}
       - run: echo "IS_RELEASE_REQUEST=1" >> "$GITHUB_ENV"
