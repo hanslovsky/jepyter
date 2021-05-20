@@ -18,7 +18,7 @@ jobs:
         name: Determine release version
         run: .github/workflows/determine-release-version.sh
       - if: ${{ env.RELEASE_REQUEST != '' }}
-      - name: Set version in gradle.properties
+        name: Set version in gradle.properties
         run: .github/workflows/bump-semver.sh
       - if: ${{ env.RELEASE_REQUEST != '' }}
         name: Create release PR
