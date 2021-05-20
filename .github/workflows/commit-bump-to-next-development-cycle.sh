@@ -6,5 +6,5 @@ set -e
 git config user.name github-actions
 git config user.email github-actions@github.com
 git add gradle.properties
-git commit -m "Bump to next development cycle (${{ env.NEW_PROJECT_VERSION }})"
+git commit -m "Bump to next development cycle ($NEW_PROJECT_VERSION)"
 git push
