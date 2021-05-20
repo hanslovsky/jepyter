@@ -2,7 +2,7 @@
 
 set -e
 
-PROJECT_VERSION=$(.github/workflow/get-property.sh version)
+PROJECT_VERSION=$(.github/workflows/get-property.sh version)
 echo PROJECT_VERSION="$PROJECT_VERSION" >> "$GITHUB_ENV"
 echo PROJECT_VERSION="$PROJECT_VERSION"
 
