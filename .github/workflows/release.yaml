@@ -14,16 +14,16 @@ jobs:
           ISSUE_LABELS: ${{ toJSON(github.event.issue.labels) }}
       - run: echo "IS_RELEASE_REQUEST=1" >> "$GITHUB_ENV"
         if: contains(github.event.issue.labels.*.name, 'release request')
-      - if: ${{ env.RELEASE_REQUEST != '' }}
+      - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Check out code
         uses: actions/checkout@v2
-      - if: ${{ env.RELEASE_REQUEST != '' }}
+      - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Determine release version
         run: .github/workflows/determine-release-version.sh
-      - if: ${{ env.RELEASE_REQUEST != '' }}
+      - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Set version in gradle.properties
         run: .github/workflows/bump-semver.sh
-      - if: ${{ env.RELEASE_REQUEST != '' }}
+      - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Create release PR
         uses: peter-evans/create-pull-request@v3
         with:
