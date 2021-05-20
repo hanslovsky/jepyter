@@ -1,0 +1,40 @@
+name: Release
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  Create-Release-PR:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "IS_RELEASE_REQUEST=1" >> "$GITHUB_ENV"
+        if: contains(github.event.pull_request.labels.*.name, 'release request')
+      - if: ${{ env.RELEASE_REQUEST != '' }}
+        name: Check out code
+        uses: actions/checkout@v2
+      - if: ${{ env.RELEASE_REQUEST != '' }}
+        name: Determine release version
+        run: .github/workflows/determine-release-version.sh
+      - if: ${{ env.RELEASE_REQUEST != '' }}
+      - name: Set version in gradle.properties
+        run: .github/workflows/bump-semver.sh
+      - if: ${{ env.RELEASE_REQUEST != '' }}
+        name: Create release PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Release Jepyter ${{ env.NEW_PROJECT_VERSION }}
+          delete-branch: true
+          signoff: false
+          draft: false
+          branch: release-request/${{ env.NEW_PROJECT_VERSION }}
+          title: Release ${{ env.NEW_PROJECT_VERSION }}
+          body: 'TBD: auto-generate from history'
+          labels: |
+            release
+            automated pr
+        
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+      
+          
