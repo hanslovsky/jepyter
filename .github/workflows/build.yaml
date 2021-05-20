@@ -64,7 +64,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.MODULE_PATH }}
           asset_name: ${{ env.MODULE_NAME }}
-          asset_content_type: application/java-archive
+          asset_content_type: text/plain
       - name: Upload pom
         if: ${{ github.ref == 'refs/heads/main' && env.IS_RELEASE_VERSION == '1' }}
         uses: actions/upload-release-asset@v1
@@ -74,7 +74,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.POM_PATH }}
           asset_name: ${{ env.POM_NAME }}
-          asset_content_type: application/java-archive
+          asset_content_type: application/xml
       - name: Upload jep.json
         if: ${{ github.ref == 'refs/heads/main' && env.IS_RELEASE_VERSION == '1' }}
         uses: actions/upload-release-asset@v1
@@ -84,7 +84,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: jep-release.json
           asset_name: jep.json
-          asset_content_type: application/java-archive
+          asset_content_type: application/json
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
   Bump-Development-Cycle:
