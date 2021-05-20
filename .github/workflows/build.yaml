@@ -117,3 +117,5 @@ jobs:
           draft: false
           branch: bump-development-cycle/${{ env.NEW_PROJECT_VERSION }}
           title: Bump to next development cycle  ${{ env.NEW_PROJECT_VERSION }}
+          labels: |
+            bump development cycle
