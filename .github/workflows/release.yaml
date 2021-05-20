@@ -9,6 +9,7 @@ jobs:
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "The issue has these labels: ${{ github.event.pull_request.labels }}"
       - run: echo "IS_RELEASE_REQUEST=1" >> "$GITHUB_ENV"
         if: contains(github.event.pull_request.labels.*.name, 'release request')
       - if: ${{ env.RELEASE_REQUEST != '' }}
