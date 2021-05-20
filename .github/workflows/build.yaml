@@ -32,6 +32,8 @@ jobs:
         run: ./gradlew clean build test publishToMavenLocal
       - name: Define project environment variables
         run: .github/workflows/define-project-environment-variables.sh
+      - name: Create library definition with current project version
+        run: .github/workflows/replace-jepyter-version-in-jep.json.sh
       - name: Create Release (main branch and release version only)
         if: ${{ github.ref == 'refs/heads/main' && env.IS_RELEASE_VERSION == '1' }}
         id: create_release
@@ -72,6 +74,16 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.POM_PATH }}
           asset_name: ${{ env.POM_NAME }}
+          asset_content_type: application/java-archive
+      - name: Upload jep.json
+        if: ${{ github.ref == 'refs/heads/main' && env.IS_RELEASE_VERSION == '1' }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: jep-release.json
+          asset_name: jep.json
           asset_content_type: application/java-archive
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
