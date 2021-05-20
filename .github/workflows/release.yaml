@@ -22,7 +22,7 @@ jobs:
         run: .github/workflows/determine-release-version.sh
       - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Set version in gradle.properties
-        run: .github/workflows/bump-semver.sh
+        run: .github/workflows/replace-version.sh
       - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Create release PR
         uses: peter-evans/create-pull-request@v3
