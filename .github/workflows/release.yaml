@@ -17,6 +17,8 @@ jobs:
       - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Check out code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Determine release version
         run: .github/workflows/determine-release-version.sh
