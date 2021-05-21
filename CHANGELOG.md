@@ -1,5 +1,16 @@
 # Changelog
 
+## jepyter-0.1.17 (2021-05-21)
+
+#### Docs
+
+* Mention conventional commits
+#### Others
+
+* Add check that commit before dev cycle bump is release
+
+Full set of changes: [`jepyter-0.1.16...jepyter-0.1.17`](https://github.com/hanslovsky/jepyter/compare/jepyter-0.1.16...jepyter-0.1.17)
+
 ## jepyter-0.1.16 (2021-05-21)
 
 #### Others
