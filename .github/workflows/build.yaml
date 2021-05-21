@@ -55,6 +55,7 @@ jobs:
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
         run: .github/workflows/define-project-environment-variables.sh
       - name: Create and push lightweight tag
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
         run: |
           git tag "$PROJECT_NAME-$PROJECT_VERSION"
           git push --tags
