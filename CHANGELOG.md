@@ -1,12 +1,9 @@
 # Changelog
 
-## jepyter-0.1.14 (2021-05-21)
+## jepyter-0.1.15 (2021-05-21)
 
-#### Others
 
-* Fetch all when checking out
-
-Full set of changes: [`jepyter-0.1.13...jepyter-0.1.14`](https://github.com/hanslovsky/jepyter/compare/jepyter-0.1.13...jepyter-0.1.14)
+Full set of changes: [`jepyter-0.1.13...jepyter-0.1.15`](https://github.com/hanslovsky/jepyter/compare/jepyter-0.1.13...jepyter-0.1.15)
 
 ## jepyter-0.1.13 (2021-05-21)
 
@@ -17,7 +14,15 @@ Full set of changes: [`jepyter-0.1.13...jepyter-0.1.14`](https://github.com/hans
 
 * Auto-generate changelog ([#16](https://github.com/hanslovsky/jepyter/issues/16))
 
-Full set of changes: [`jepyter-0.1.12...jepyter-0.1.13`](https://github.com/hanslovsky/jepyter/compare/jepyter-0.1.12...jepyter-0.1.13)
+Full set of changes: [`jepyter-0.1.14...jepyter-0.1.13`](https://github.com/hanslovsky/jepyter/compare/jepyter-0.1.14...jepyter-0.1.13)
+
+## jepyter-0.1.14 (2021-05-20)
+
+#### Others
+
+* Fetch all when checking out
+
+Full set of changes: [`jepyter-0.1.12...jepyter-0.1.14`](https://github.com/hanslovsky/jepyter/compare/jepyter-0.1.12...jepyter-0.1.14)
 
 ## jepyter-0.1.12 (2021-05-20)
 
