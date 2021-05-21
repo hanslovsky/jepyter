@@ -53,7 +53,6 @@ jobs:
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
       - name: Define project environment variables
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
-      - name: Define project environment variables
         run: .github/workflows/define-project-environment-variables.sh
       - run: echo RELEASE_TAG="$PROJECT_NAME-$PROJECT_VERSION" >> "$GITHUB_ENV"
       - name: Set up JDK 8
