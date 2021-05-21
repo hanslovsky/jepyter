@@ -1,4 +1,8 @@
 name: Tag
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   Create-Release:

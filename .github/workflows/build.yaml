@@ -32,34 +32,34 @@ jobs:
         run: ./gradlew clean build test
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
-Create-Lightweight-Release-Tag:
-  runs-on: ubuntu-latest
-  steps:
-    - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-    - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-    - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-    - run: echo "IS_BUMP_COMMIT=1" >> "$GITHUB_ENV"
-      if: ${{ github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Bump to next development cycle' }}
-    - name: Check out code
-      if: ${{ env.IS_BUMP_COMMIT == 1 }}
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
-    - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      if: ${{ env.IS_BUMP_COMMIT == 1 }}
-    - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      if: ${{ env.IS_BUMP_COMMIT == 1 }}
-    - run: "git checkout 'HEAD^'"
-      if: ${{ env.IS_BUMP_COMMIT == 1 }}
-    - name: Define project environment variables
-      if: ${{ env.IS_BUMP_COMMIT == 1 }}
-      run: .github/workflows/define-project-environment-variables.sh
-    - name: Create lightweight tag
-      if: ${{ env.IS_BUMP_COMMIT == 1 }}
-      uses: mathieudutour/github-tag-action@v5.5
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        create_annotated_tag: false
-        custom_tag: ${{env.PROJECT_NAME}}-${{env.PROJECT_VERSION}}
-        default_bump: false
-    - run: echo "🍏 This job's status is ${{ job.status }}."
+  Create-Lightweight-Release-Tag:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - run: echo "IS_BUMP_COMMIT=1" >> "$GITHUB_ENV"
+        if: ${{ github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Bump to next development cycle' }}
+      - name: Check out code
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+      - run: "git checkout 'HEAD^'"
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+      - name: Define project environment variables
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        run: .github/workflows/define-project-environment-variables.sh
+      - name: Create lightweight tag
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        uses: mathieudutour/github-tag-action@v5.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          create_annotated_tag: false
+          custom_tag: ${{env.PROJECT_NAME}}-${{env.PROJECT_VERSION}}
+          default_bump: false
+      - run: echo "🍏 This job's status is ${{ job.status }}."
