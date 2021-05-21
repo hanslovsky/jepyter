@@ -1,5 +1,13 @@
 # Changelog
 
+## jepyter-0.1.16 (2021-05-21)
+
+#### Others
+
+* Always print job status in the end
+
+Full set of changes: [`jepyter-0.1.15...jepyter-0.1.16`](https://github.com/hanslovsky/jepyter/compare/jepyter-0.1.15...jepyter-0.1.16)
+
 ## jepyter-0.1.15 (2021-05-21)
 
 
