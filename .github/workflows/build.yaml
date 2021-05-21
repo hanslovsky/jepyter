@@ -32,7 +32,7 @@ jobs:
         run: ./gradlew clean build test
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
-  Create-Lightweight-Release-Tag:
+  Create-Release:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -53,10 +53,79 @@ jobs:
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
       - name: Define project environment variables
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
+      - name: Define project environment variables
         run: .github/workflows/define-project-environment-variables.sh
-      - name: Create and push lightweight tag
+      - run: echo RELEASE_TAG="$PROJECT_NAME-$PROJECT_VERSION" >> "$GITHUB_ENV"
+      - name: Set up JDK 8
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
-        run: |
-          git tag "$PROJECT_NAME-$PROJECT_VERSION"
-          git push --tags
+        uses: actions/setup-java@v2
+        with:
+          java-version: "8"
+          distribution: "adopt"
+      - name: Set up Python 3.9
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Python dependencies
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        run: .github/workflows/prepare-python.sh
+      - name: Build and execute unit tests
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        run: ./gradlew clean build test publishToMavenLocal
+      - name: Create library definition with current project version
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        run: .github/workflows/replace-jepyter-version-in-jep.json.sh
+      - name: Create Release
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          release_name: Jepyter ${{ env.PROJECT_VERSION }}
+          draft: false
+          prerelease: false
+      - name: Upload jar
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.ARTIFACT_PATH }}
+          asset_name: ${{ env.ARTIFACT_NAME }}
+          asset_content_type: application/java-archive
+      - name: Upload module json
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.MODULE_PATH }}
+          asset_name: ${{ env.MODULE_NAME }}
+          asset_content_type: text/plain
+      - name: Upload pom
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.POM_PATH }}
+          asset_name: ${{ env.POM_NAME }}
+          asset_content_type: application/xml
+      - name: Upload jep.json
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: jep-release.json
+          asset_name: jep.json
+          asset_content_type: application/json
       - run: echo "🍏 This job's status is ${{ job.status }}."
+        if: ${{ always() }}
