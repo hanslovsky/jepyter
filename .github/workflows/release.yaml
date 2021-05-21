@@ -37,6 +37,12 @@ jobs:
           labels: |
             release
             automated pr
+      - if: ${{ env.IS_RELEASE_REQUEST != '' }}
+        name: Close release request issue
+        uses: peter-evans/close-issue@v1
+        with:
+          comment: |
+            Created release request PR #${{ steps.cpr.outputs.pull-request-number }}
         
       - run: echo "🍏 This job's status is ${{ job.status }}."
       
