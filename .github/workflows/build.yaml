@@ -39,7 +39,7 @@ jobs:
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - run: echo "IS_BUMP_COMMIT=1" >> "$GITHUB_ENV"
-        if: ${{ github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Bump to next development cycle' }}
+        if: ${{ github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Bump to next development cycle') }}
       - name: Check out code
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
         uses: actions/checkout@v2
