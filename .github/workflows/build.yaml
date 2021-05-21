@@ -31,6 +31,7 @@ jobs:
       - name: Build and execute unit tests
         run: ./gradlew clean build test
       - run: echo "🍏 This job's status is ${{ job.status }}."
+        if: ${{ always() }}
 
   Create-Release:
     runs-on: ubuntu-latest
@@ -55,6 +56,7 @@ jobs:
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
         run: .github/workflows/define-project-environment-variables.sh
       - run: echo RELEASE_TAG="$PROJECT_NAME-$PROJECT_VERSION" >> "$GITHUB_ENV"
+        if: ${{ env.IS_BUMP_COMMIT == 1 }}
       - name: Set up JDK 8
         if: ${{ env.IS_BUMP_COMMIT == 1 }}
         uses: actions/setup-java@v2

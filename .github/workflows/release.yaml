@@ -75,5 +75,6 @@ jobs:
           branch: ${{ env.RELEASE_BRANCH }}
         
       - run: echo "🍏 This job's status is ${{ job.status }}."
+        if: ${{ always() }}
       
           

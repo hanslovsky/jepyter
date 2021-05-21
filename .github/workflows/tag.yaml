@@ -94,3 +94,4 @@ jobs:
           asset_name: jep.json
           asset_content_type: application/json
       - run: echo "🍏 This job's status is ${{ job.status }}."
+        if: ${{ always() }}
