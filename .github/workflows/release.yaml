@@ -25,6 +25,7 @@ jobs:
         run: .github/workflows/replace-version.sh
       - if: ${{ env.IS_RELEASE_REQUEST != '' }}
         name: Create release PR
+        id: release_pr
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: Release Jepyter ${{ env.NEW_PROJECT_VERSION }}
@@ -42,7 +43,7 @@ jobs:
         uses: peter-evans/close-issue@v1
         with:
           comment: |
-            Created release request PR #${{ steps.cpr.outputs.pull-request-number }}
+            Created release request PR #${{ steps.release_pr.outputs.pull-request-number }}
         
       - run: echo "🍏 This job's status is ${{ job.status }}."
       
