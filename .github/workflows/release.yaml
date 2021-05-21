@@ -46,7 +46,7 @@ jobs:
           delete-branch: true
           signoff: false
           draft: false
-          branch: ${{ RELEASE_BRANCH }}
+          branch: ${{ env.RELEASE_BRANCH }}
           title: Release ${{ env.NEW_PROJECT_VERSION }}
           body: 'TBD: auto-generate from history'
           labels: |
@@ -72,7 +72,7 @@ jobs:
           message: Bump to next development cycle  ${{ env.NEW_PROJECT_VERSION }}
           push: true
           pull_strategy: NO_PULL
-          branch: ${{ RELEASE_BRANCH }}
+          branch: ${{ env.RELEASE_BRANCH }}
         
       - run: echo "🍏 This job's status is ${{ job.status }}."
       
