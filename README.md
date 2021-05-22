@@ -37,7 +37,28 @@ Usage examples are provided in
  - [`jepyter-numpy.ipynb`](jepyter-numpy.ipynb): Usage example with [NumPy](https://numpy.org/). Requires NumPy installation into the interpreter that is used for Jep.
  - [`jepyter-ntakt.ipynb`](jepyter-ntakt.ipynb): Usage example for shared memory between [nta.kt](https://github.com/saalfeldlab/ntakt) and NumPy. Requires NumPy installation into the interpreter that is used for Jep.
 
-
 ## Contribute
 
 Jepyter follows [conventional commits](https://www.conventionalcommits.org/) to auto-generate a meaningful changelog.
+
+
+### Releases
+Jepyter uses [GitHub Actions](https://github.com/features/actions) for CI/CD.
+This allows for a stream-lined release process with the `gradle.properties` file as single source of truth for the release version. Most of the release process is automated:
+ 1. Create a [release request issue](https://github.com/hanslovsky/jepyter/issues/new?assignees=&labels=release+request&template=request-release.md&title=%5BRELEASE%5D), e.g. 
+ 2. The issue triggers a pull request (PR) with two commits, e.g. hanslovsky/jepyter#35, and is closed right after creation:
+    1. Set version in `gradle.properties` to non-`SNAPSHOT` (currently, it just removes `-SNAPSHOT` but it should not be too hard to infer new version from commit history or have an optional parameter for the release request issue)
+    2. Bump to next development cycle: Increment patch version and add `-SNAPSHOT`.
+ 3. **Rebase merge the PR into the main branch to trigger release. Automatic releases will not work with any other merge options than rebase merge** (see the following steps for details).
+ 4. On any push (that includes PR merge) to main branch, a GitHub action checks
+    - if the commit message indicates bump to next development cycle, and
+    - if the parent commit (`HEAD^`) has a non-`SNAPSHOT` version in `gradle.properties`.
+    If both conditions are fulfilled, a release is created for `HEAD^` with the version in `gradle.properties`.
+
+There are two major issues that I see here:
+ 1. There is no way to restrict the merge option of a PR to only rebase based on the tag or some other information.
+    It is thus the responsibility of the maintainer to be diligent and pick the right option
+    if the repository allows for other merge options than rebase merge.
+ 2. How to handle changes to main branch after release request has been created? Probably one of those two options:
+    - Close the PR with GitHub actions
+    - Re-generate the PR commits from current main on request in a coment in the PRp
