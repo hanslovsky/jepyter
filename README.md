@@ -57,7 +57,7 @@ This allows for a stream-lined release process with the `gradle.properties` file
 
 There are two major issues that I see here:
  1. There is no way to restrict the merge option of a PR to only rebase based on the tag or some other information.
-    It is thus responsibility of the maintainer to be diligent and pick the right option
+    It is thus the responsibility of the maintainer to be diligent and pick the right option
     if the repository allows for other merge options than rebase merge.
  2. How to handle changes to main branch after release request has been created? Probably one of those two options:
     - Close the PR with GitHub actions
