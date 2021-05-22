@@ -45,8 +45,8 @@ Jepyter follows [conventional commits](https://www.conventionalcommits.org/) to 
 ### Releases
 Jepyter uses [GitHub Actions](https://github.com/features/actions) for CI/CD.
 This allows for a stream-lined release process with the `gradle.properties` file as single source of truth for the release version. Most of the release process is automated:
- 1. Create a [release request issue](https://github.com/hanslovsky/jepyter/issues/new?assignees=&labels=release+request&template=request-release.md&title=%5BRELEASE%5D), e.g. 
- 2. The issue triggers a pull request (PR) with two commits, e.g. hanslovsky/jepyter#35, and is closed right after creation:
+ 1. Create a [release request issue](https://github.com/hanslovsky/jepyter/issues/new?assignees=&labels=release+request&template=request-release.md&title=%5BRELEASE%5D), e.g. #34
+ 2. The issue triggers a pull request (PR) with two commits, e.g. #35, and is closed right after creation:
     1. Set version in `gradle.properties` to non-`SNAPSHOT` (currently, it just removes `-SNAPSHOT` but it should not be too hard to infer new version from commit history or have an optional parameter for the release request issue)
     2. Bump to next development cycle: Increment patch version and add `-SNAPSHOT`.
  3. **Rebase merge the PR into the main branch to trigger release. Automatic releases will not work with any other merge options than rebase merge** (see the following steps for details).
@@ -61,4 +61,4 @@ There are two major issues that I see here:
     if the repository allows for other merge options than rebase merge.
  2. How to handle changes to main branch after release request has been created? Probably one of those two options:
     - Close the PR with GitHub actions
-    - Re-generate the PR commits from current main on request in a coment in the PRp
+    - Re-generate the PR commits from current main on request in a comment in the PR
